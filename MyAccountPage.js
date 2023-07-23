@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackActions, useNavigation, useRoute } from '@react-navigation/native';
 
 const MyAccountPage = ({ route }) => {
     const navigation = useNavigation();
@@ -23,7 +23,10 @@ const MyAccountPage = ({ route }) => {
 
     const handleLogout = () => {
         // Add logic to handle log out
-        console.log('Logging out...');
+        navigation.reset({
+            index: 0, // The index of the screen you want to navigate to in the new stack
+            routes: [{ name: 'LoginRegister', params: { /* optional params */ } }],
+          });
     };
 
     return (
@@ -43,10 +46,10 @@ const MyAccountPage = ({ route }) => {
                 <Text style={styles.fundsAmount}>{funds} LEI</Text>
                 <View style={styles.fundsButtonsContainer}>
                     <TouchableOpacity style={styles.fundsButton} onPress={handleAddFunds}>
-                    <Text style={styles.Add}>Add</Text>
+                        <Text style={styles.Add}>Add</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fundsButton} onPress={handleExtractFunds}>
-                    <Text style={styles.Add}>Extract</Text>
+                        <Text style={styles.Add}>Extract</Text>
                     </TouchableOpacity>
                 </View>
             </View>

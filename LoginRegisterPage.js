@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native'; // Import the useNavig
 
 const LoginRegisterPage = () => {
     const navigation = useNavigation(); // Initialize the navigation object
-
+    const funds = 5;
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -42,7 +42,7 @@ const LoginRegisterPage = () => {
                 console.log('Login:', email, password);
 
                 // Redirect to GamePage after successful login
-                navigation.navigate('Game');
+                navigation.navigate('Game', { email, funds });
             }
         } else {
             // Simulate registration - Add your actual registration logic here
@@ -57,7 +57,7 @@ const LoginRegisterPage = () => {
                 console.log('Registration successful:', username, email, password);
 
                 // Redirect to GamePage after successful registration
-                navigation.navigate('Game', { username, email }); // Pass the username as a parameter
+                navigation.navigate('Game', { username, email, funds }); // Pass the username as a parameter
             }
         }
     };

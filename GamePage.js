@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,9 +12,28 @@ const GamePage = () => {
   const { username, email, funds } = route.params; // Receive the username and funds from the route parameters
 
   const handleAnswerQuestion = () => {
-    // Add your logic for handling the "Answer the Question" button press
-    console.log('Answering the question...');
-  };
+    // Show the confirmation dialog when option 1 is selected
+    Alert.alert(
+        'Confirmation',
+        'Are you sure you want to pay 1 LEU to answer the question?',
+        [
+            {
+                text: 'No',
+                style: 'cancel',
+            },
+            {
+                text: 'Yes',
+                onPress: () => {
+                    console.log('Paid...');
+                    // Add your logic for handling option 1 here
+
+                    // Replace the current screen with the GamePage
+                    navigation.replace('Question', { username, email, funds });
+                },
+            },
+        ],
+    );
+};
 
   const handleMyAccount = () => {
     // Handle navigation to the MyAccountPage component with funds prop
