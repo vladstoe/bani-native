@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 const GamePage = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { username, funds } = route.params; // Receive the username and funds from the route parameters
+  const { username, email, funds } = route.params; // Receive the username and funds from the route parameters
 
   const handleAnswerQuestion = () => {
     // Add your logic for handling the "Answer the Question" button press
@@ -18,7 +18,7 @@ const GamePage = () => {
 
   const handleMyAccount = () => {
     // Handle navigation to the MyAccountPage component with funds prop
-    navigation.navigate('MyAccount', { username, funds });
+    navigation.navigate('MyAccount', { username, email, funds });
   };
 
   return (

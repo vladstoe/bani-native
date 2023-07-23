@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 const MyAccountPage = ({ route }) => {
     const navigation = useNavigation();
-    const { username, funds } = route.params; // Receive the username and funds from the route parameters
+    const { username, email, funds } = route.params; // Receive the username and funds from the route parameters
     const handleAddFunds = () => {
         // Add logic to handle adding funds
         console.log('Adding funds...');
@@ -36,16 +36,17 @@ const MyAccountPage = ({ route }) => {
             </TouchableOpacity>
             <View style={styles.usernameContainer}>
                 <Text style={styles.username}>{username}</Text>
+                <Text style={styles.email}>{email}</Text>
             </View>
             <View style={styles.fundsContainer}>
                 <Text style={styles.myFundsText}>My Funds</Text>
                 <Text style={styles.fundsAmount}>{funds} LEI</Text>
                 <View style={styles.fundsButtonsContainer}>
                     <TouchableOpacity style={styles.fundsButton} onPress={handleAddFunds}>
-                        <Ionicons name="add" size={24} color="#007bff" />
+                    <Text style={styles.Add}>Add</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fundsButton} onPress={handleExtractFunds}>
-                        <Ionicons name="remove" size={24} color="#007bff" />
+                    <Text style={styles.Add}>Extract</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -87,6 +88,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
     },
+    email: {
+        fontSize: 20,
+        color: 'grey',
+    },
     fundsContainer: {
         alignItems: 'center',
     },
@@ -104,10 +109,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     fundsButton: {
-        backgroundColor: '#fff',
+        backgroundColor: 'blue',
         padding: 10,
         borderRadius: 20,
         marginHorizontal: 10,
+        width: 70,
+        justifyContent: 'center',
+        alignItems: 'center',
+
     },
     deleteAccountContainer: {
         alignItems: 'center',
@@ -136,6 +145,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    Add: {
+        color: 'white',
+        fontWeight: 'bold'
+    }
 });
 
 export default MyAccountPage;

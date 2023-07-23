@@ -57,7 +57,7 @@ const LoginRegisterPage = () => {
                 console.log('Registration successful:', username, email, password);
 
                 // Redirect to GamePage after successful registration
-                navigation.navigate('Game', { username }); // Pass the username as a parameter
+                navigation.navigate('Game', { username, email }); // Pass the username as a parameter
             }
         }
     };
