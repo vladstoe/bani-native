@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import * as firebase from "firebase";
-// TODO: Add SDKs for Firebase products that you want to use
+import firebase from "firebase/compat" // TODO: Add SDKs for Firebase products that you want to use
+
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -23,5 +23,6 @@ if (firebase.apps.length === 0) {
 }
 
 const auth = firebase.auth()
+const firestore = firebase.firestore(); // Add Firestore instance
 
-export { auth };
+export { auth, firestore }; // Export both auth and firestore
