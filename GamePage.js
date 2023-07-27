@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, BackHandler, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import {auth, firestore } from './firebase';
+import { useNavigation } from '@react-navigation/native';
+import { auth, firestore } from './firebase';
 
 const GamePage = () => {
   const navigation = useNavigation();
-  const route = useRoute();
   const [funds, setFunds] = useState(null); // State to hold the funds value
+  const [answered, setAnswered] = useState(false); // State to hold the answered status
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -21,6 +21,7 @@ const GamePage = () => {
         if (userSnapshot.exists) {
           const userData = userSnapshot.data();
           setFunds(userData.funds);
+          setAnswered(userData.answered);
         } else {
           console.log('User data not found.');
         }
@@ -30,11 +31,74 @@ const GamePage = () => {
     };
 
     fetchUserData();
+
+    // Add the event listener for the Android back button when the component mounts
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    };
   }, []);
 
-  const handleAnswerQuestion = () => {
-    // Add your logic for handling the answer question button here
-    console.log('Paid...');
+  const handleBackPress = () => {
+    // Prevent default behavior of the back button (navigating back or exiting the app)
+    return true;
+  };
+
+  const handleAnswerQuestion = async () => {
+    if (!answered) {
+      // Check if funds are sufficient to proceed
+      if (funds > 0) {
+        // Ask the user if they want to spend 1 LEI
+        Alert.alert(
+          'Confirmation',
+          'Do you want to spend 1 LEI to answer the question?',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: async () => {
+                // Proceed with the logic to answer the question
+                navigation.replace('Question');
+                console.log('Paid...');
+  
+                try {
+                  // Update the answered status in Firestore
+                  const userId = auth.currentUser.uid;
+                  const userRef = firestore.collection('users').doc(userId);
+                  await userRef.update({ answered: true });
+  
+                  // Decrease the funds by 1 in Firestore
+                  await userRef.update({ funds: funds - 1 });
+                  setFunds(funds - 1); // Update the local state as well
+                } catch (error) {
+                  console.error('Error updating answered status:', error);
+                }
+              },
+            },
+          ],
+          { cancelable: true }
+        );
+      } else {
+        // Show pop-up message for insufficient funds
+        Alert.alert(
+          'Insufficient Funds',
+          'You do not have enough LEI to answer the question.',
+          [
+            {
+              text: 'OK',
+              onPress: () => console.log('Insufficient Funds Alert Closed'),
+            },
+          ]
+        );
+      }
+    } else {
+      console.log('You have already answered the question.');
+    }
   };
 
   const handleMyAccount = () => {
@@ -42,17 +106,22 @@ const GamePage = () => {
     navigation.navigate('MyAccount');
   };
 
-
   return (
     <View style={styles.container}>
       {/* Display the funds at the top of the page */}
       <View style={styles.fundsContainer}>
-        <Text style={styles.fundsText}>You have {funds} LEI</Text>
+        <Text style={styles.fundsText}>You have</Text>
+        <Text style={[styles.fundsText, styles.fundsValue]}> {funds} LEI</Text>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleAnswerQuestion}>
+      <TouchableOpacity
+        style={[styles.button, answered && styles.disabledButton]} // Disable the button if answered is true
+        onPress={handleAnswerQuestion}
+        disabled={answered} // Disable the button based on answered state
+      >
         <Text style={styles.buttonText}>Pay and answer the question</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.myAccountButton} onPress={handleMyAccount}>
         <Ionicons name="person-circle" size={30} color="#fff" />
       </TouchableOpacity>
@@ -82,21 +151,32 @@ const styles = StyleSheet.create({
   },
   myAccountButton: {
     position: 'absolute',
-    top: 20,
+    top: 45,
     right: 20,
   },
   fundsContainer: {
-    position: 'absolute',
-    top: 20,
-    left: '50%',
-    transform: [{ translateX: -50 }],
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
   },
   fundsText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  fundsValue: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc', // Change the background color of the disabled button
   },
 });
 

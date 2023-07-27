@@ -51,6 +51,7 @@ const LoginScreen = () => {
           firestore.collection('users').doc(user.uid).set({
             username: username,
             funds: 0,
+            answered: false,
           });
 
           navigation.replace('Game'); // Navigate to the Game page
