@@ -1,44 +1,47 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-const Stack = createStackNavigator();
+import {auth, firestore } from './firebase';
 
 const GamePage = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { username, email, funds } = route.params; // Receive the username and funds from the route parameters
+  const [funds, setFunds] = useState(null); // State to hold the funds value
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = auth.currentUser.uid;
+
+      try {
+        // Fetch user data from Firestore
+        const userRef = firestore.collection('users').doc(userId);
+        const userSnapshot = await userRef.get();
+
+        if (userSnapshot.exists) {
+          const userData = userSnapshot.data();
+          setFunds(userData.funds);
+        } else {
+          console.log('User data not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleAnswerQuestion = () => {
-    // Show the confirmation dialog when option 1 is selected
-    Alert.alert(
-        'Confirmation',
-        'Are you sure you want to pay 1 LEU to answer the question?',
-        [
-            {
-                text: 'No',
-                style: 'cancel',
-            },
-            {
-                text: 'Yes',
-                onPress: () => {
-                    console.log('Paid...');
-                    // Add your logic for handling option 1 here
-
-                    // Replace the current screen with the GamePage
-                    navigation.replace('Question', { username, email, funds });
-                },
-            },
-        ],
-    );
-};
+    // Add your logic for handling the answer question button here
+    console.log('Paid...');
+  };
 
   const handleMyAccount = () => {
     // Handle navigation to the MyAccountPage component with funds prop
-    navigation.navigate('MyAccount', { username, email, funds });
+    navigation.navigate('MyAccount');
   };
+
 
   return (
     <View style={styles.container}>

@@ -31,7 +31,7 @@ const LoginScreen = () => {
         .then(userCredentials => {
           const user = userCredentials.user;
           console.log('Logged in with:', user.email);
-          navigation.navigate('Game'); // Navigate to the Game page
+          navigation.replace('Game'); // Navigate to the Game page
 
         })
         .catch(error => alert(error.message));
@@ -53,7 +53,7 @@ const LoginScreen = () => {
             funds: 0,
           });
 
-          navigation.navigate('Game'); // Navigate to the Game page
+          navigation.replace('Game'); // Navigate to the Game page
         })
         .catch(error => alert(error.message));
     }
