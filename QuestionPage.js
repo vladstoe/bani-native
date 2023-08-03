@@ -7,6 +7,9 @@ import { doc, setDoc, increment } from 'firebase/firestore';
 const QuestionPage = () => {
   const navigation = useNavigation();
   const [funds, setFunds] = useState(null); // State to hold the funds value
+  const [question, setQuestion] = useState('');
+  const [option1, setOption1] = useState('');
+  const [option2, setOption2] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,12 +32,47 @@ const QuestionPage = () => {
     };
 
     fetchUserData();
+
+    const fetchQuestionData = async () => {
+      try {
+        const questionRef = firestore.collection('question').doc('question');
+        const questionSnapshot = await questionRef.get();
+        if (questionSnapshot.exists) {
+          const questionData = questionSnapshot.data();
+          setQuestion(questionData.question);
+        } else {
+          console.log('Question data not found.');
+        }
+
+        const option1Ref = firestore.collection('question').doc('option1');
+        const option1Snapshot = await option1Ref.get();
+        if (option1Snapshot.exists) {
+          const option1Data = option1Snapshot.data();
+          setOption1(option1Data.option1);
+        } else {
+          console.log('Option 1 data not found.');
+        }
+
+        const option2Ref = firestore.collection('question').doc('option2');
+        const option2Snapshot = await option2Ref.get();
+        if (option2Snapshot.exists) {
+          const option2Data = option2Snapshot.data();
+          setOption2(option2Data.option2);
+        } else {
+          console.log('Option 2 data not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching question data:', error);
+      }
+    };
+
+    fetchQuestionData();
   }, []);
 
   const handleOption1 = async () => {
     Alert.alert(
       'Confirmation',
-      'Are you sure you want to select "Blue" as your favorite color?',
+      `Are you sure you want to select "${option1}" as your favorite color?`,
       [
         {
           text: 'No',
@@ -43,32 +81,24 @@ const QuestionPage = () => {
         {
           text: 'Yes',
           onPress: async () => {
-            console.log('Option 1 (Blue) selected...');
-  
+            console.log(`${option1} selected...`);
+
             // Add your logic for handling option 1 here
-  
+
             // Subtract 1 from funds and update it in Firestore
-            if (funds > 0) {
-              try {
-                const userId = auth.currentUser.uid;
-                const updatedFunds = funds - 1;
-  
-                // Update the funds field in Firestore
-                const userRef = firestore.collection('users').doc(userId);
-                await userRef.update({ funds: updatedFunds });
-  
-                // Update the local state with the new funds value
-                setFunds(updatedFunds);
-  
-                // Add +1 to the corresponding field in fundsQuestions document
-                const fundsQuestionsRef = doc(firestore, 'funds', 'FundsOption1');
-                await setDoc(fundsQuestionsRef, { amount: increment(1), [userId]: true }, { merge: true });
-            
-              } catch (error) {
-                console.error('Error updating funds:', error);
-              }
+
+            try {
+              const userId = auth.currentUser.uid;
+
+              // Add +1 to the corresponding field in fundsQuestions document
+              const fundsQuestionsRef = doc(firestore, 'funds', 'FundsOption1');
+              await setDoc(fundsQuestionsRef, { amount: increment(1), [userId]: true }, { merge: true });
+
+            } catch (error) {
+              console.error('Error updating funds:', error);
             }
-  
+
+
             // Replace the current screen with the GamePage
             navigation.replace('Game');
           },
@@ -76,11 +106,11 @@ const QuestionPage = () => {
       ],
     );
   };
-  
+
   const handleOption2 = async () => {
     Alert.alert(
       'Confirmation',
-      'Are you sure you want to select "Red" as your favorite color?',
+      `Are you sure you want to select "${option2}" as your favorite color?`,
       [
         {
           text: 'No',
@@ -89,31 +119,23 @@ const QuestionPage = () => {
         {
           text: 'Yes',
           onPress: async () => {
-            console.log('Option 2 (Red) selected...');
-  
+            console.log(`${option2} selected...`);
+
             // Add your logic for handling option 2 here
-  
+
             // Subtract 1 from funds and update it in Firestore
-            if (funds > 0) {
-              try {
-                const userId = auth.currentUser.uid;
-                const updatedFunds = funds - 1;
-  
-                // Update the funds field in Firestore
-                const userRef = firestore.collection('users').doc(userId);
-                await userRef.update({ funds: updatedFunds });
-  
-                // Update the local state with the new funds value
-                setFunds(updatedFunds);
-  
-                // Add +1 to the corresponding field in fundsQuestions document
-                const fundsQuestionsRef = doc(firestore, 'funds', 'FundsOption2');
-                await setDoc(fundsQuestionsRef, { amount: increment(1), [userId]: true }, { merge: true });
+
+            try {
+              const userId = auth.currentUser.uid;
+
+              // Add +1 to the corresponding field in fundsQuestions document
+              const fundsQuestionsRef = doc(firestore, 'funds', 'FundsOption2');
+              await setDoc(fundsQuestionsRef, { amount: increment(1), [userId]: true }, { merge: true });
             } catch (error) {
-                console.error('Error updating funds:', error);
-              }
+              console.error('Error updating funds:', error);
             }
-  
+
+
             // Replace the current screen with the GamePage
             navigation.replace('Game');
           },
@@ -121,18 +143,18 @@ const QuestionPage = () => {
       ],
     );
   };
-  
+
   return (
     <View style={styles.container}>
       {/* Display the funds at the top of the page */}
 
 
-      <Text style={styles.questionText}>What is your favorite color?</Text>
+      <Text style={styles.questionText}>{question}</Text>
       <TouchableOpacity style={styles.optionButton} onPress={handleOption1}>
-        <Text style={styles.optionText}>Blue</Text>
+        <Text style={styles.optionText}>{option1}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.optionButton} onPress={handleOption2}>
-        <Text style={styles.optionText}>Red</Text>
+        <Text style={styles.optionText}>{option2}</Text>
       </TouchableOpacity>
     </View>
   );
