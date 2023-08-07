@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
+import handleReset from './reset';
 
 const MyAccountPage = () => {
   const navigation = useNavigation();
@@ -29,6 +30,8 @@ const MyAccountPage = () => {
         console.error('Error fetching user data:', error);
       }
     };
+    
+  handleReset(navigation); // Call handleReset before logging out
 
     fetchUserData();
   }, []);

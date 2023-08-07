@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, BackHandler, Alert } from 're
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
+import handleReset from './reset';
 
 const GamePage = () => {
   const navigation = useNavigation();
@@ -30,7 +31,13 @@ const GamePage = () => {
       }
     };
 
-    fetchUserData();
+    const handleResetAndFetchData = async () => {
+      await handleReset(navigation); // Wait for handleReset to complete
+      fetchUserData(); // Fetch user data after the reset is done
+    };
+
+    handleResetAndFetchData(); // Call the reset function and fetch user data
+
 
     // Add the event listener for the Android back button when the component mounts
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
