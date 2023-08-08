@@ -32,7 +32,6 @@ const LoginScreen = () => {
           const user = userCredentials.user;
           console.log('Logged in with:', user.email);
           navigation.replace('Game'); // Navigate to the Game page
-
         })
         .catch(error => alert(error.message));
     } else {
@@ -60,9 +59,25 @@ const LoginScreen = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    if (!email) {
+      alert('Please enter your email in the box to receive a password reset');
+      return;
+    }
+
+    auth
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        alert('Password reset email sent. Please check your inbox or spam folder.');
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Text style={styles.title}>{isLogin ? 'Login' : 'Register'}</Text>
+      <Text style={styles.title}>{isLogin ? 'Welcome back' : 'Create an account'}</Text>
       {!isLogin && (
         <TextInput
           style={styles.input}
@@ -128,9 +143,15 @@ const LoginScreen = () => {
           {isLogin ? "Don't have an account? Register Now" : 'Already have an account? Login'}
         </Text>
       </TouchableOpacity>
+      {isLogin && (
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        </TouchableOpacity>
+      )}
     </KeyboardAvoidingView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -196,8 +217,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   switchText: {
-    color: '#fff',
+    color: '#18C6DE',
     fontSize: 16,
+    marginTop: 20,
+  },
+  forgotPassword: {
+    color: '#A9999A',
+    fontSize: 16,
+    marginTop: 20,
   },
 });
 
