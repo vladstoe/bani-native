@@ -40,9 +40,13 @@ const LoginScreen = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const generateRandomFunds = () => {
+    return Math.floor(Math.random() * 16) + 5; // Generates a random number between 5 and 20
+  };
+
   const handleLoginRegister = () => {
     if (resetStatus) {
-      alert('Cannot log in or register while a reset is in progress.');
+      alert('Cannot log in or register while a reset is in progress. Return to the app in a bit...');
       return;
     }
 
@@ -68,10 +72,11 @@ const LoginScreen = () => {
         .then(userCredentials => {
           const user = userCredentials.user;
           console.log('Registered with:', user.email);
+          const randomFunds = generateRandomFunds();
 
           firestore.collection('users').doc(user.uid).set({
             username: username,
-            funds: 0,
+            funds: randomFunds,
             answered: false,
           });
 
