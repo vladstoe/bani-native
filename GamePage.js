@@ -56,7 +56,7 @@ const GamePage = () => {
   const handleAnswerQuestion = async () => {
     if (!answered) {
       // Check if funds are sufficient to proceed
-      if (funds > 0) {
+      if (funds >= 1) {
         // Ask the user if they want to spend 1 LEI
         Alert.alert(
           'Confirmation',
@@ -72,13 +72,13 @@ const GamePage = () => {
                 // Proceed with the logic to answer the question
                 navigation.replace('Question');
                 console.log('Paid...');
-  
+
                 try {
                   // Update the answered status in Firestore
                   const userId = auth.currentUser.uid;
                   const userRef = firestore.collection('users').doc(userId);
                   await userRef.update({ answered: true });
-  
+
                   // Decrease the funds by 1 in Firestore
                   await userRef.update({ funds: funds - 1 });
                   setFunds(funds - 1); // Update the local state as well
@@ -113,8 +113,26 @@ const GamePage = () => {
     navigation.navigate('MyAccount');
   };
 
+  const handleExplainGame = () => {
+    Alert.alert(
+      'Game Explanation',
+      'In fiecare zi la ora 00:00 este o intrebare noua. Pentru a raspune la intrebare trebuie sa platesti 1 LEU. Daca raspunsul tau face parte din majoritate, atunci ai castigat bani! Suma castigata este calculata de (numarul total de persoane)/(numarul persoanelor ce au ales aceeasi optiune ca tine).',
+      [
+        {
+          text: 'Got It',
+          onPress: () => console.log('Game Explanation Closed'),
+        },
+      ]
+    );
+  };
+  
   return (
     <View style={styles.container}>
+
+      <TouchableOpacity onPress={handleExplainGame} style={styles.infoButton}>
+        <Ionicons name="help-circle-outline" size={30} color="#fff"  />
+      </TouchableOpacity>
+
       {/* Display the funds at the top of the page */}
       <View style={styles.fundsContainer}>
         <Text style={styles.fundsText}>You have</Text>
@@ -184,6 +202,12 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#ccc', // Change the background color of the disabled button
+  },
+
+  infoButton: {
+    position: 'absolute',
+    top: 45,
+    left: 20,
   },
 });
 

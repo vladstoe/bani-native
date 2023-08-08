@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth, firestore } from './firebase';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Import the Ionicons library
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -12,8 +12,25 @@ const LoginScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [resetStatus, setResetStatus] = useState(false);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchResetStatus = async () => {
+      try {
+        const resetDoc = await firestore.collection('reset').doc('reset').get();
+        if (resetDoc.exists) {
+          const resetData = resetDoc.data();
+          setResetStatus(resetData.reset);
+        }
+      } catch (error) {
+        console.error('Error fetching reset data:', error);
+      }
+    };
+
+    fetchResetStatus();
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,6 +41,11 @@ const LoginScreen = () => {
   };
 
   const handleLoginRegister = () => {
+    if (resetStatus) {
+      alert('Cannot log in or register while a reset is in progress.');
+      return;
+    }
+
     if (isLogin) {
       // Login logic
       auth

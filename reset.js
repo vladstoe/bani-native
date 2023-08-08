@@ -76,7 +76,6 @@ const handleReset = async (navigation) => {
         console.log('Reset performed successfully!');
 
         // 5. Set the 'reset' field back to false in the 'reset' document
-        await resetCollectionRef.update({ reset: false });
 
         // 6. Log out the user and navigate to the 'LoginRegister' screen
         auth
