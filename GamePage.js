@@ -116,7 +116,7 @@ const GamePage = () => {
   const handleExplainGame = () => {
     Alert.alert(
       'Game Explanation',
-      'In fiecare zi la ora 00:00 este o intrebare noua. Pentru a raspune la intrebare trebuie sa platesti 1 LEU. Daca raspunsul tau face parte din majoritate, atunci ai castigat bani! Suma castigata este calculata de (numarul total de persoane)/(numarul persoanelor ce au ales aceeasi optiune ca tine).',
+      'Every day at 00:00 there is a new question. To answer the question you have to pay 1 LEU. If your answer is part of the majority, then you win money! The amount won is calculated by (total number of people)/(number of people who chose the same option as you).',
       [
         {
           text: 'Got It',
