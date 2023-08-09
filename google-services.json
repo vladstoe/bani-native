@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "202438382912",
+    "firebase_url": "https://bani-native-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "bani-native",
+    "storage_bucket": "bani-native.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202438382912:android:a2fdca93d2e90b633bd6a5",
+        "android_client_info": {
+          "package_name": "com.vladstoe.baninative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202438382912-q5rivtfduira41dssr2r5kuonil4thg8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaOMoOZlR8NKonVFMIHKobJFIgCaEtdTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202438382912-q5rivtfduira41dssr2r5kuonil4thg8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

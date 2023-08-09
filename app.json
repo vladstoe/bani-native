@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "bani-native",
+    "name": "Answer and get paid",
     "slug": "bani-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/download.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vladstoe.baninative"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "513836cd-af7a-4245-8f5f-56885cdbd49b"
+      }
     }
   }
 }
