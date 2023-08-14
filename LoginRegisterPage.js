@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useState, useEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar } from 'react-native'; // Import StatusBar
 import { auth, firestore } from './firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Constants from 'expo-constants';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -49,7 +50,7 @@ const LoginScreen = () => {
       alert('Cannot log in or register while a reset is in progress. Return to the app in a bit...');
       return;
     }
-
+  
     if (isLogin) {
       // Login logic
       auth
@@ -61,30 +62,35 @@ const LoginScreen = () => {
         })
         .catch(error => alert(error.message));
     } else {
-      // Register logic
       if (password !== confirmPassword) {
         alert('Passwords do not match.');
         return;
       }
-
+  
+      if (!email || !password || !confirmPassword || !username) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+  
       auth
         .createUserWithEmailAndPassword(email, password)
         .then(userCredentials => {
           const user = userCredentials.user;
           console.log('Registered with:', user.email);
           const randomFunds = generateRandomFunds();
-
+  
           firestore.collection('users').doc(user.uid).set({
             username: username,
             funds: randomFunds,
             answered: false,
           });
-
+  
           navigation.replace('Game'); // Navigate to the Game page
         })
         .catch(error => alert(error.message));
     }
   };
+  
 
   const handleForgotPassword = () => {
     if (!email) {
@@ -104,6 +110,10 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <StatusBar
+        backgroundColor="black" // Set the status bar color
+        hidden={true} // Hide the status bar
+      />
       <Text style={styles.title}>{isLogin ? 'Welcome back' : 'Create an account'}</Text>
       {!isLogin && (
         <TextInput

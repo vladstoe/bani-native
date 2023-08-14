@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
 import { doc, setDoc, increment } from 'firebase/firestore';
@@ -147,7 +147,10 @@ const QuestionPage = () => {
   return (
     <View style={styles.container}>
       {/* Display the funds at the top of the page */}
-
+      <StatusBar
+        backgroundColor="black" // Set the status bar color
+        hidden={true} // Hide the status bar
+      />
 
       <Text style={styles.questionText}>{question}</Text>
       <TouchableOpacity style={styles.optionButton} onPress={handleOption1}>

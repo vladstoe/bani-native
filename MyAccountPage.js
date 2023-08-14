@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
@@ -109,6 +109,10 @@ const MyAccountPage = () => {
 
   return (
     <View style={styles.container}>
+        <StatusBar
+        backgroundColor="black" // Set the status bar color
+        hidden={true} // Hide the status bar
+      />
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.replace('Game')}
