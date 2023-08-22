@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar } from 'react-native'; // Import StatusBar
 import { auth, firestore } from './firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Constants from 'expo-constants';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');

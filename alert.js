@@ -12,6 +12,6 @@ const alertPolyfill = (title, description, options, extra) => {
     }
 }
 
-const alert = Platform.OS === 'web' ? alertPolyfill : Alert.alert
+const custom_alert = Platform.OS === 'web' ? alertPolyfill : Alert.alert
 
-export default alert
+export default custom_alert

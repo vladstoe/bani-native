@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
 import handleReset from './reset';
-import alert from './alert'
+import custom_alert from './alert'
 
 const GamePage = () => {
   const navigation = useNavigation();
@@ -59,7 +59,7 @@ const GamePage = () => {
       // Check if funds are sufficient to proceed
       if (funds >= 1) {
         // Ask the user if they want to spend 1 LEI
-        alert(
+        custom_alert(
           'Confirmation',
           'Do you want to spend 1 LEI to answer the question?',
           [
@@ -94,14 +94,7 @@ const GamePage = () => {
       } else {
         // Show pop-up message for insufficient funds
         alert(
-          'Insufficient Funds',
-          'You do not have enough LEI to answer the question.',
-          [
-            {
-              text: 'OK',
-              onPress: () => console.log('Insufficient Funds Alert Closed'),
-            },
-          ]
+          'You do not have enough LEI to answer the question.'
         );
       }
     } else {
@@ -115,29 +108,18 @@ const GamePage = () => {
   };
 
   const handleExplainGame = () => {
-    alert(
-      'Game Explanation',
-      'Every day at 00:00 there is a new question. To answer the question you have to pay 1 LEU. If your answer is part of the majority, then you win money! The amount won is calculated by (total number of people)/(number of people who chose the same option as you).',
-      [
-        {
-          text: 'Got It',
-          onPress: () => console.log('Game Explanation Closed'),
-        },
-      ]
-    );
+    alert('Game Explanation: Every day at 00:00 there is a new question. To answer the question you have to pay 1 LEU. If your answer is part of the majority, then you win money! The amount won is calculated by (total number of people)/(number of people who chose the same option as you).');
   };
-  
+
   return (
 
-    
+
     <View style={styles.container}>
       <StatusBar
         backgroundColor="black" // Set the status bar color
         hidden={true} // Hide the status bar
       />
-      <TouchableOpacity onPress={handleExplainGame} style={styles.infoButton}>
-        <Ionicons name="help-circle-outline" size={30} color="#fff"  />
-      </TouchableOpacity>
+
 
       {/* Display the funds at the top of the page */}
       <View style={styles.fundsContainer}>
@@ -145,6 +127,9 @@ const GamePage = () => {
         <Text style={[styles.fundsText, styles.fundsValue]}> {funds} LEI</Text>
       </View>
 
+      <TouchableOpacity onPress={handleExplainGame} style={styles.infoButton} >
+        <Ionicons name="help-circle-outline" size={30} color="#fff" />
+      </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, answered && styles.disabledButton]} // Disable the button if answered is true
         onPress={handleAnswerQuestion}
