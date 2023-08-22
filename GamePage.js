@@ -61,14 +61,14 @@ const GamePage = () => {
         // Ask the user if they want to spend 1 LEI
         custom_alert(
           'Confirmation',
-          'Do you want to spend 1 LEI to answer the question?',
+          'Do you want to spend 1 LEI to answer the question? Note: After selecting "Yes", make sure to not refresh/close the page while answering the question, the money is taken whether you select an option or not and you only have one chance to answer it.',
           [
             {
               text: 'Cancel',
               style: 'cancel',
             },
             {
-              text: 'OK',
+              text: 'Yes',
               onPress: async () => {
                 // Proceed with the logic to answer the question
                 navigation.replace('Question');
