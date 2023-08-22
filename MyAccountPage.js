@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
 import handleReset from './reset';
+import alert from './alert'
 
 const MyAccountPage = () => {
   const navigation = useNavigation();
@@ -47,7 +48,7 @@ const MyAccountPage = () => {
   };
 
   const handleDeleteAccount = async () => {
-    Alert.alert(
+    alert(
       'Are you sure?',
       'This action is irreversible. All your data will be permanently deleted.',
       [
@@ -83,7 +84,7 @@ const MyAccountPage = () => {
   };
 
   const handleLogout = () => {
-    Alert.alert(
+    alert(
       'Logout',
       'Are you sure you want to log out?',
       [

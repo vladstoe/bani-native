@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
 import handleReset from './reset';
+import alert from './alert'
 
 const GamePage = () => {
   const navigation = useNavigation();
@@ -58,7 +59,7 @@ const GamePage = () => {
       // Check if funds are sufficient to proceed
       if (funds >= 1) {
         // Ask the user if they want to spend 1 LEI
-        Alert.alert(
+        alert(
           'Confirmation',
           'Do you want to spend 1 LEI to answer the question?',
           [
@@ -92,7 +93,7 @@ const GamePage = () => {
         );
       } else {
         // Show pop-up message for insufficient funds
-        Alert.alert(
+        alert(
           'Insufficient Funds',
           'You do not have enough LEI to answer the question.',
           [
@@ -114,7 +115,7 @@ const GamePage = () => {
   };
 
   const handleExplainGame = () => {
-    Alert.alert(
+    alert(
       'Game Explanation',
       'Every day at 00:00 there is a new question. To answer the question you have to pay 1 LEU. If your answer is part of the majority, then you win money! The amount won is calculated by (total number of people)/(number of people who chose the same option as you).',
       [
