@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, StatusBar } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import { auth, firestore } from './firebase';
 import { doc, setDoc, increment } from 'firebase/firestore';
-import alert from './alert'
+import custom_alert from './alert';
 
 const QuestionPage = () => {
   const navigation = useNavigation();
@@ -71,7 +71,7 @@ const QuestionPage = () => {
   }, []);
 
   const handleOption1 = async () => {
-    alert(
+    custom_alert(
       'Confirmation',
       `Are you sure you want to select "${option1}"?`,
       [
@@ -109,7 +109,7 @@ const QuestionPage = () => {
   };
 
   const handleOption2 = async () => {
-    alert(
+    custom_alert(
       'Confirmation',
       `Are you sure you want to select "${option2}"?`,
       [
