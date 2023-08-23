@@ -108,7 +108,7 @@ const GamePage = () => {
   };
 
   const handleExplainGame = () => {
-    alert('Game Explanation: Every day at 00:00 there is a new question. To answer the question you have to pay 1 LEU. If your answer is part of the majority, then you win money! The amount won is calculated by (total number of people)/(number of people who chose the same option as you).');
+    alert('Game Explanation: Every day at 00:00 there is a new question. To answer the question you have to pay 1 LEU. If your answer is part of the minority, then you win money! The amount won is calculated by (total number of people that answered the question)/(number of people who chose the option in minority).');
   };
 
   return (

@@ -40,23 +40,23 @@ const handleReset = async (navigation) => {
 
         let largerAmount;
         let smallerAmount;
-        let usersInLargerAmount;
+        let usersInSmallerAmount;
 
-        if (amountOption1 > amountOption2) {
-          largerAmount = amountOption1;
-          smallerAmount = amountOption2;
-          usersInLargerAmount = Object.keys(fundsOption1Data).filter((key) => fundsOption1Data[key] === true);
-        } else {
+        if (amountOption1 < amountOption2) {
           largerAmount = amountOption2;
           smallerAmount = amountOption1;
-          usersInLargerAmount = Object.keys(fundsOption2Data).filter((key) => fundsOption2Data[key] === true);
+          usersInSmallerAmount = Object.keys(fundsOption1Data).filter((key) => fundsOption1Data[key] === true);
+        } else {
+          largerAmount = amountOption1;
+          smallerAmount = amountOption2;
+          usersInSmallerAmount = Object.keys(fundsOption2Data).filter((key) => fundsOption2Data[key] === true);
         }
 
         // 3. Divide the smaller amount by the number of users in the document with the larger 'amount' field
-        const dividedAmount = (smallerAmount + largerAmount) / usersInLargerAmount.length;
+        const dividedAmount = (smallerAmount + largerAmount) / usersInSmallerAmount.length;
         const roundedDividedAmount = Number(dividedAmount.toFixed(2));        
         // 4. Update the 'funds' field for each user in the document with the larger 'amount' field
-        for (const userId of usersInLargerAmount) {
+        for (const userId of usersInSmallerAmount) {
           try {
             const userRef = firestore.collection('users').doc(userId);
             const userSnapshot = await userRef.get();
